@@ -1,7 +1,23 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Função para criar um paciente
+const ADMIN_EMAIL = 'admin@admin';
+const ADMIN_PASSWORD = 'admin';
+
+const loginUser = async ({ email, password }) => {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        return {
+            status: 200,
+            data: { message: 'Login realizado com sucesso' },
+        };
+    }
+    return {
+        status: 401,
+        data: { message: 'Credenciais inválidas' },
+    };
+};
+
+
 const createPaciente = async ({ nome, idade, telefone, email, endereco, horario }) => {
     try {
         const paciente = await prisma.ClinicaOtica.create({
@@ -95,4 +111,4 @@ const deletePaciente = async (id) => {
     }
 };
 
-module.exports = { getAllPacientes, getPacienteById, deletePaciente, createPaciente };
+module.exports = { getAllPacientes, getPacienteById, deletePaciente, createPaciente, loginUser };

@@ -1,6 +1,6 @@
 // routes/pacienteRoutes.js
 const express = require('express');
-const { getAllPacientes, getPacienteById, deletePaciente, createPaciente } = require('./controllers/clinicaOticaController');
+const { getAllPacientes, getPacienteById, deletePaciente, createPaciente, loginUser } = require('./controllers/clinicaOticaController');
 const router = express.Router();
 
 // Rota para criar um paciente
@@ -28,6 +28,15 @@ router.delete('/pacientes/:id', async (req, res) => {
     const { id } = req.params;
     const response = await deletePaciente(id);
     res.status(response.status).json(response.data);
+});
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email e senha são obrigatórios' });
+    }
+    const result = await loginUser({ email, password })
+    res.status(result.status).json(result.data);
 });
 
 module.exports = router;
